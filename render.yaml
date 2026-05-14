@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: silent-guardian
+    runtime: image
+    repo: https://github.com/sararazadz-prog/my
+    branch: main
+    plan: free
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GITHUB_TOKEN
+        sync: false
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
