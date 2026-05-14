@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>الحارس الصامت | وكيل دستوري حي</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', 'Cairo', 'Tahoma', sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        .creative-header {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+        .logo-area { display: flex; align-items: center; gap: 15px; flex-wrap: wrap; }
+        .mood-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(0,0,0,0.3);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9em;
+            color: white;
+        }
+        .mood-emoji { font-size: 1.3em; animation: bounce 2s infinite; }
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+        .stats-row { display: flex; gap: 15px; font-size: 0.8em; color: rgba(255,255,255,0.8); flex-wrap: wrap; }
+        .stat { display: flex; align-items: center; gap: 5px; }
+        .copy-btn, .export-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 6px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.8em;
+            transition: all 0.2s;
+        }
+        .copy-btn:hover, .export-btn:hover { background: rgba(255,255,255,0.4); transform: scale(1.02); }
+        .main-area { display: flex; flex: 1; gap: 20px; padding: 20px; overflow: hidden; flex-wrap: wrap; }
+        .chat-section {
+            flex: 2;
+            min-width: 300px;
+            background: rgba(255,255,255,0.95);
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 20px; background: #f9f9f9; }
+        .message { margin-bottom: 15px; display: flex; flex-direction: column; }
+        .user-message { align-items: flex-end; }
+        .agent-message { align-items: flex-start; }
+        .message-bubble {
+            max-width: 80%;
+            padding: 12px 18px;
+            border-radius: 20px;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+        }
+        .user-message .message-bubble {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        .agent-message .message-bubble {
+            background: white;
+            color: #333;
+            border-bottom-left-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .feedback-buttons { display: flex; gap: 8px; margin-top: 5px; margin-right: 10px; }
+        .feedback-btn { background: none; border: none; cursor: pointer; font-size: 0.8em; opacity: 0.5; }
+        .feedback-btn:hover { opacity: 1; }
+        .message-time { font-size: 0.65em; color: #888; margin-top: 5px; }
+        .chat-input {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input input {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+        }
+        .chat-input button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .chat-input button:hover { transform: scale(1.02); }
+        .canvas-section {
+            width: 450px;
+            min-width: 350px;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            border-radius: 25px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+        .canvas-header {
+            background: rgba(0,0,0,0.5);
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            font-size: 0.9em;
+        }
+        .art-container {
+            flex: 1;
+            background: #1a1a2e;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            min-height: 300px;
+        }
+        .art-svg {
+            max-width: 100%;
+            max-height: 100%;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.05);
+        }
+        .art-description {
+            background: rgba(0,0,0,0.5);
+            padding: 10px 15px;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.8em;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .canvas-stats {
+            background: rgba(0,0,0,0.3);
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            color: rgba(255,255,255,0.6);
+            font-size: 0.7em;
+        }
+        .status-footer {
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(5px);
+            padding: 8px 20px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.7em;
+            color: rgba(255,255,255,0.7);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .typing { color: #888; font-style: italic; }
+        @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .loading { animation: pulse 1.5s infinite; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #888; border-radius: 10px; }
+        @media (max-width: 900px) {
+            .canvas-section { width: 100%; min-height: 350px; }
+            .main-area { flex-direction: column; }
+        }
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 0.9em;
+            z-index: 9999;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            animation: fadeOut 2s ease forwards;
+        }
+        .toast.error { background: #f44336; }
+        @keyframes fadeOut {
+            0% { opacity: 1; }
+            70% { opacity: 1; }
+            100% { opacity: 0; visibility: hidden; }
+        }
+        .refresh-art {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            padding: 4px 12px;
+            border-radius: 15px;
+            cursor: pointer;
+            color: white;
+            font-size: 0.7em;
+        }
+        .refresh-art:hover { background: rgba(255,255,255,0.4); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="creative-header">
+            <div class="logo-area">
+                <div class="mood-indicator">
+                    <span class="mood-emoji" id="moodEmoji">🎭</span>
+                    <span id="moodText">{{ mood }}</span>
+                </div>
+                <div class="stats-row">
+                    <div class="stat">📊 <span id="decisionsCount">{{ decisions_count }}</span> قرار</div>
+                    <div class="stat">🧠 {{ maturity_level }} ({{ "%.0f"|format(maturity_score) }}%)</div>
+                    <div class="stat">📚 <span id="pendingCount">{{ pending_questions }}</span> سؤال</div>
+                </div>
+            </div>
+            <div class="stats-row">
+                <div class="stat">🟢 Groq: {{ "متصل" if groq_available else "غير متصل" }}</div>
+                <div class="stat">🔄 <span id="iterations">{{ iterations }}</span> دورة</div>
+                <div class="stat">📖 {{ current_book[:25] }}</div>
+                <button class="copy-btn" onclick="copyFullConversation()">📋 نسخ المحادثة</button>
+                <button class="export-btn" onclick="exportConversationAsFile()">📁 حفظ كملف</button>
+            </div>
+        </div>
+
+        <div class="main-area">
+            <div class="chat-section">
+                <div class="chat-messages" id="messages">
+                    <div class="message agent-message">
+                        <div class="message-bubble">
+                            🎨 السلام عليكم. أنا الحارس الصامت<br>
+                            📖 دستوري: {{ "{:,}".format(sacred_length) }} حرفاً<br>
+                            🎭 مزاجي: {{ mood }}<br>
+                            🖌️ أعبر عن نفسي بالرسم في اللوحة المجاورة<br>
+                            💬 اسألني، أو قل "يا حارس، هل من جديد؟"
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="question" placeholder="اكتب سؤالك هنا..." onkeypress="if(event.keyCode==13) sendMessage()">
+                    <button onclick="sendMessage()">إرسال ✨</button>
+                </div>
+            </div>
+
+            <div class="canvas-section">
+                <div class="canvas-header">
+                    <span>🎨 تعبير الوكيل البصري</span>
+                    <button class="refresh-art" onclick="refreshArt()">⟳ تحديث</button>
+                </div>
+                <div class="art-container" id="artContainer">
+                    <div style="color: rgba(255,255,255,0.5); text-align: center;">⏳ جاري تحميل التعبير الفني...</div>
+                </div>
+                <div class="art-description" id="artDescription">الوكيل يعبر عن مزاجه بصرياً</div>
+                <div class="canvas-stats">
+                    <span>🖌️ كل رسمة فريدة</span>
+                    <span id="artTime"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-footer">
+            <span>🛡️ الحارس الصامت - وكيل دستوري حي</span>
+            <span>🎨 الوكيل يرسم بنفسه | 📚 يتعلم تلقائياً</span>
+        </div>
+    </div>
+
+    <script>
+        async function refreshArt() {
+            try {
+                const response = await fetch('/agent-art');
+                const art = await response.json();
+                const container = document.getElementById('artContainer');
+                const description = document.getElementById('artDescription');
+                const artTime = document.getElementById('artTime');
+
+                if (art.svg) {
+                    container.innerHTML = `<div class="art-svg">${art.svg}</div>`;
+                } else {
+                    container.innerHTML = `<div style="color: rgba(255,255,255,0.5); text-align: center;">🎨 ${art.description || 'تعبير فني عن الحالة'}</div>`;
+                }
+
+                description.innerHTML = `✨ ${art.description || 'تعبير بصري عن المزاج'}`;
+                artTime.innerHTML = `🎨 ${new Date(art.timestamp).toLocaleTimeString('ar') || new Date().toLocaleTimeString('ar')}`;
+
+                if (art.mood) {
+                    document.getElementById('moodText').innerText = art.mood;
+                    const emojis = {
+                        "هادئ": "😌", "نشيط": "⚡", "فضولي": "🤔", "فلسفي": "🧠",
+                        "متأمل": "🌙", "حكيم": "🦉", "عميق": "🌊", "صامت": "🤫"
+                    };
+                    document.getElementById('moodEmoji').innerText = emojis[art.mood] || "🎭";
+                }
+            } catch(e) {
+                console.error('فشل تحميل الفن', e);
+            }
+        }
+
+        refreshArt();
+        setInterval(refreshArt, 60000);
+
+        const messagesDiv = document.getElementById('messages');
+        const questionInput = document.getElementById('question');
+
+        function showToast(message, isError = false) {
+            const toast = document.createElement('div');
+            toast.className = 'toast' + (isError ? ' error' : '');
+            toast.innerText = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 2000);
+        }
+
+        function copyFullConversation() {
+            const messages = document.querySelectorAll('#messages .message');
+            let conversationText = '';
+            conversationText += `📋 محادثة الحارس الصامت\n`;
+            conversationText += `📅 ${new Date().toLocaleString('ar-SA')}\n`;
+            conversationText += `${'='.repeat(60)}\n\n`;
+
+            messages.forEach(msg => {
+                const isUser = msg.classList.contains('user-message');
+                const bubble = msg.querySelector('.message-bubble');
+                const timeElem = msg.querySelector('.message-time');
+                if (bubble) {
+                    const role = isUser ? '👤 أنت' : '🤖 الحارس الصامت';
+                    const text = bubble.innerText.trim();
+                    const time = timeElem ? timeElem.innerText : '';
+                    conversationText += `[${time}] ${role}:\n${text}\n\n${'-'.repeat(40)}\n\n`;
+                }
+            });
+
+            navigator.clipboard.writeText(conversationText).then(() => {
+                showToast('✅ تم نسخ المحادثة بالكامل');
+            }).catch(() => {
+                showToast('❌ فشل النسخ، حاول مرة أخرى', true);
+            });
+        }
+
+        function exportConversationAsFile() {
+            const messages = document.querySelectorAll('#messages .message');
+            let conversationText = '';
+            conversationText += `محادثة الحارس الصامت\n`;
+            conversationText += `التاريخ: ${new Date().toLocaleString('ar-SA')}\n`;
+            conversationText += `${'='.repeat(60)}\n\n`;
+
+            messages.forEach(msg => {
+                const isUser = msg.classList.contains('user-message');
+                const bubble = msg.querySelector('.message-bubble');
+                const timeElem = msg.querySelector('.message-time');
+                if (bubble) {
+                    const role = isUser ? 'المستخدم' : 'الحارس الصامت';
+                    const text = bubble.innerText.trim();
+                    const time = timeElem ? timeElem.innerText : '';
+                    conversationText += `[${time}] ${role}:\n${text}\n\n`;
+                }
+            });
+
+            const blob = new Blob([conversationText], { type: 'text/plain;charset=utf-8' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.href = url;
+            link.download = `conversation_${new Date().toISOString().slice(0, 19).replace(/:/g, '-')}.txt`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            showToast('📁 تم حفظ المحادثة كملف');
+        }
+
+        function addMessage(text, isUser, chatId = null) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'agent-message'}`;
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            bubble.innerText = text;
+            messageDiv.appendChild(bubble);
+
+            if (!isUser && chatId) {
+                const feedbackDiv = document.createElement('div');
+                feedbackDiv.className = 'feedback-buttons';
+                feedbackDiv.innerHTML = `
+                    <button class="feedback-btn" onclick="sendFeedback(${chatId}, true)">👍 مفيد</button>
+                    <button class="feedback-btn" onclick="sendFeedback(${chatId}, false)">👎 غير مفيد</button>
+                `;
+                messageDiv.appendChild(feedbackDiv);
+            }
+
+            const timeSpan = document.createElement('div');
+            timeSpan.className = 'message-time';
+            timeSpan.innerText = new Date().toLocaleTimeString('ar');
+            messageDiv.appendChild(timeSpan);
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTyping() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message agent-message';
+            typingDiv.id = 'typing';
+            typingDiv.innerHTML = '<div class="message-bubble typing loading">🎨 الحارس يتأمل ويفكر...</div>';
+            messagesDiv.appendChild(typingDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            const typing = document.getElementById('typing');
+            if (typing) typing.remove();
+        }
+
+        async function sendMessage() {
+            const question = questionInput.value.trim();
+            if (!question) return;
+
+            addMessage(question, true);
+            questionInput.value = '';
+            showTyping();
+
+            try {
+                const response = await fetch('/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: question })
+                });
+                const data = await response.json();
+                hideTyping();
+                addMessage(data.response, false, data.chat_id);
+                refreshArt();
+            } catch (error) {
+                hideTyping();
+                addMessage('❌ عذراً، حدث خطأ. حاول مرة أخرى.', false);
+            }
+        }
+
+        async function sendFeedback(chatId, isPositive) {
+            try {
+                await fetch('/feedback', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: chatId, feedback: isPositive })
+                });
+            } catch(e) {
+                console.error('فشل إرسال التقييم', e);
+            }
+        }
+
+        setInterval(async () => {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                if (data.mood) {
+                    document.getElementById('decisionsCount').innerText = data.decisions_count || 0;
+                    document.getElementById('pendingCount').innerText = data.pending_questions || 0;
+                    document.getElementById('iterations').innerText = data.iterations || 0;
+
+                    const emojis = {
+                        "هادئ": "😌", "نشيط": "⚡", "فضولي": "🤔", "فلسفي": "🧠",
+                        "متأمل": "🌙", "حكيم": "🦉", "عميق": "🌊", "صامت": "🤫"
+                    };
+                    document.getElementById('moodEmoji').innerText = emojis[data.mood] || "🎭";
+                }
+            } catch(e) {}
+        }, 30000);
+
+        questionInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') sendMessage();
+        });
+    </script>
+</body>
+</html>
