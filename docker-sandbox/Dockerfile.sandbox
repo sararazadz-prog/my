@@ -1,0 +1,8 @@
+FROM python:3.11-slim
+
+RUN rm -rf /usr/local/lib/python3.11/subprocess.py 2>/dev/null || true
+RUN rm -rf /usr/local/lib/python3.11/os.py 2>/dev/null || true
+
+WORKDIR /sandbox
+
+CMD ["python", "-c", "import sys; exec(sys.stdin.read())"]
