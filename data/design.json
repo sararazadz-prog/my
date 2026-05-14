@@ -1,0 +1,9 @@
+{
+  "background": "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)",
+  "header": "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
+  "bubble_user": "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)",
+  "bubble_agent": "white",
+  "text_color": "#333",
+  "mood_name": "فضولي",
+  "generated_at": "2026-05-13T15:22:27.147252"
+}
